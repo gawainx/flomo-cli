@@ -3,6 +3,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 from rich.theme import Theme
+from rich.markdown import Markdown
 
 # ========== UI Theme ==========
 custom_theme = Theme({
@@ -31,3 +32,23 @@ def print_rule(title: Optional[str] = None):
         console.rule(f"[info]{title}[/info]")
     else:
         console.rule()
+
+
+def preview_markdown(content: str) -> bool:
+    # 渲染版
+    md = Markdown(content, code_theme="monokai", inline_code_lexer="python")  # code_theme 可按需调整
+
+    # 原文版，显示换行符
+    # 可选：将换行显式标识
+    raw_with_symbols = content.replace("\r\n", "\n").replace("\n", "⏎\n")
+    raw_panel = Panel(Text(raw_with_symbols), title="原文（换行标识为 ⏎）", border_style="cyan", box=ROUNDED)
+
+    console.print(Panel(md, title="Markdown 预览", border_style="green", box=ROUNDED))
+    console.print(raw_panel)
+
+    console.print("[info]确认发送？[y/N][/info] ", end="")
+    try:
+        choice = input().strip().lower()
+    except EOFError:
+        choice = "n"
+    return choice in ("y", "yes")

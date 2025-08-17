@@ -6,12 +6,6 @@ from prompt_toolkit.styles import Style  # ========== Key Bindings ==========
 from pygments.lexers.markup import MarkdownLexer
 
 class KeyBindingManager:
-    """
-    管理键位绑定：
-    - 优先尝试 Shift+Enter（<s-enter>, <s-return>），若失败则绑定 Ctrl+J/Ctrl+Shift+J。
-    - 绑定 Ctrl+C 清空当前输入（抛 KeyboardInterrupt 让上层处理）
-    - 绑定 Ctrl+D 退出
-    """
 
     def __init__(self, accept_callback: Callable[[], None], clear_callback: Callable[[], None]):
         self._kb = KeyBindings()

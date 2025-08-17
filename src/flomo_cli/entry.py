@@ -115,7 +115,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
             description="flomo-cli: Memo any memory to flomo for cli!"
     )
-    parser.add_argument("--url", required=True,
+    parser.add_argument("--url",
                         help="Your flomo api, once config, anytime use in ~/.flomo.cli.toml")
     parser.add_argument("--timeout", type=int, default=30, help="Max timeout.")
     parser.add_argument("--insecure", action="store_true", help="Whether disable tls.")
