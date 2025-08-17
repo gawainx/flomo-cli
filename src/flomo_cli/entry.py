@@ -9,13 +9,10 @@ from flomo_cli.key_manager import KeyBindingManager
 from flomo_cli.client import HttpClient
 from flomo_cli.key_manager import SessionFactory
 from flomo_cli.utils import Config
-from prompt_toolkit import PromptSession
-from prompt_toolkit.key_binding import KeyBindings
+
 from prompt_toolkit.document import Document
 from prompt_toolkit.application.current import get_app
-from prompt_toolkit.lexers import PygmentsLexer
 from pygments.lexers.markup import MarkdownLexer
-from prompt_toolkit.styles import Style
 
 from rich.console import Console
 from rich.panel import Panel

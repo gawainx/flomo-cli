@@ -1,8 +1,6 @@
 from typing import Callable
 from prompt_toolkit import PromptSession
 from prompt_toolkit.key_binding import KeyBindings
-from prompt_toolkit.document import Document
-from prompt_toolkit.application.current import get_app
 from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.styles import Style  # ========== Key Bindings ==========
 from pygments.lexers.markup import MarkdownLexer

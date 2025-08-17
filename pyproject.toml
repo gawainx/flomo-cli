@@ -16,7 +16,7 @@ dependencies = [
 packages = [{include = "flomo_cli", from = "src"}]
 
 [tool.poetry.scripts]
-flomo-cli = "flomo_cli.cli:main"
+flomo-cli = "flomo_cli.entry:main"
 
 
 [build-system]
