@@ -1,6 +1,6 @@
 [project]
 name = "flomo-cli"
-version = "0.1.1"
+version = "0.1.2"
 description = "Create flomo memo from your terminal"
 authors = [
     {name = "Antarx",email = "liangyi@bupt.edu.cn"}
@@ -10,7 +10,8 @@ requires-python = ">=3.12"
 dependencies = [
     "rich (>=14.1.0,<15.0.0)",
     "prompt-toolkit (>=3.0.51,<4.0.0)",
-    "toml (>=0.10.2,<0.11.0)"
+    "toml (>=0.10.2,<0.11.0)",
+    "requests (>=2.32.4,<3.0.0)"
 ]
 
 [tool.poetry]
