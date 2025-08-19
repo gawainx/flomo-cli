@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import signal
-import argparse
+import click
 from typing import Optional, Sequence
 from prompt_toolkit.document import Document
 from prompt_toolkit.application.current import get_app
@@ -110,28 +110,40 @@ class App:
             console.print("[warn] Disable tls verification !（--insecure）[/warn]")
 
 
-# ========== CLI ==========
-def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-            description="flomo-cli: Memo any memory to flomo for cli!"
-    )
-    parser.add_argument("--url",
-                        help="Your flomo api, once config, anytime use in ~/.flomo.cli.toml")
-    parser.add_argument("--timeout", type=int, default=30, help="Max timeout.")
-    parser.add_argument("--insecure", action="store_true", help="Whether disable tls.")
-    parser.add_argument("--debug", "-d", action="store_true", help="Start with debug mode.")
-    return parser.parse_args(argv)
+# ========== CLI with Click ==========
 
-
-def main(argv: Optional[Sequence[str]] = None) -> int:
+@click.group()
+@click.option("--url", help="Your flomo api, once config, anytime use in ~/.flomo.cli.toml")
+@click.option("--timeout", type=int, default=30, show_default=True, help="Max timeout.")
+@click.option("--insecure", is_flag=True, help="Whether disable tls.")
+@click.option("--debug", "-d", is_flag=True, help="Start with debug mode.")
+@click.pass_context
+def cli(ctx, url, timeout, insecure, debug):
+    """
+    flomo-cli: Memo any memory to flomo for cli!
+    """
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-
-    args = parse_args(argv)
+    # Simulate argparse.Namespace for Config.init_form_args
+    class Args:
+        pass
+    args = Args()
+    args.url = url
+    args.timeout = timeout
+    args.insecure = insecure
+    args.debug = debug
     cfg = Config.init_form_args(args)
+    ctx.obj = {"cfg": cfg}
+
+@cli.command("run")
+@click.pass_context
+def run_cmd(ctx):
+    """Start the flomo CLI app."""
+    cfg = ctx.obj["cfg"]
     app = App(cfg)
     app.run()
-    return 0
 
+def main():
+    cli(prog_name="flomo-cli")
 
 if __name__ == "__main__":
     main()
