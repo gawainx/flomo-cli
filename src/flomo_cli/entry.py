@@ -142,6 +142,48 @@ def run_cmd(ctx):
     app = App(cfg)
     app.run()
 
+
+@cli.command("info")
+@click.pass_context
+def info_cmd(ctx):
+    """
+    Show current configuration and help overview.
+    """
+    cfg: Config = ctx.obj["cfg"]
+    # URL information
+    url_text = cfg.url or "Not configured"
+    # Config file path (best-effort: Config likely persists at ~/.flomo.cli.toml; try to read from Config if exposed)
+    # The project utils.Config appears to manage config file. Try common field names for path if available; else fallback.
+    config_path = getattr(cfg, "config_path", None) or getattr(cfg, "path", None) or "~/.flomo.cli.toml"
+
+    # Build help overview using click's built-in formatter
+    prog = "flomo-cli"
+    ctx_parent = click.get_current_context()
+    # Collect subcommands and their short_help if present
+    commands = []
+    for name, cmd in sorted(ctx_parent.command.commands.items()):
+        usage = cmd.get_short_help_str() or (cmd.help or "").strip().splitlines()[0] if (getattr(cmd, "help", None)) else ""
+        commands.append((name, usage))
+
+    # Render output in English
+    console.rule("[info]Info[/info]")
+    console.print(Panel.fit(
+        Text(
+            f"Configured URL: {url_text}\n"
+            f"Config file: {config_path}\n\n"
+            f"Subcommands:\n" +
+            "\n".join([f" - {n}: {u}" for n, u in commands]) +
+            "\n\n"
+            f"Usage:\n"
+            f" - {prog} run    Start the flomo CLI app.\n"
+            f" - {prog} info   Show current configuration and help overview.\n"
+            f" - {prog} --help Show global options and help.\n",
+            no_wrap=False
+        ),
+        title="flomo-cli info",
+        border_style="cyan"
+    ))
+
 def main():
     cli(prog_name="flomo-cli")
 
